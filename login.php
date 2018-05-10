@@ -59,13 +59,12 @@ $user = new usuarios();
 	<div class="contenedor-form">
 	<h1>
 		Login
+	</h1>
 		<?php 
 			if (!empty($error)) {
 				echo "<br><small>".$error."</small>";
 			}		
 		?>
-		
-	</h1>
 		<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
 			<input type="text" name="usuario" class="input-control" placeholder="usuario">
 			<input type="password" name="pass" class="input-control" placeholder="Password">
