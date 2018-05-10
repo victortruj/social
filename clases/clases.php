@@ -59,11 +59,8 @@ class post{
 	function agregar($CodUsua, $contenido, $img)
 	{
 		$mysqli = new mysqli('127.0.0.1', 'root', '', 'social');
-		$consulta = $mysqli->query("insert into post(CodPost, CodUsua, contenido, img) values(null, :CodUsua, :contenido, :img)");
-		$consulta->execute(array(':CodUsua' => $CodUsua,
-								 ':contenido' => $contenido,
-								 ':img' => $img	
-			));
+		$consulta = $mysqli->query("insert into post(CodPost, CodUsua, contenido, img) values(null, '$CodUsua', '$contenido', '$img')");
+	
 	}
 
 
@@ -78,10 +75,14 @@ class post{
 
 	function mostrarTodo($amigos)
 	{
+
 		$mysqli = new mysqli('127.0.0.1', 'root', '', 'social');
-		$consulta = $mysqli->query("select U.CodUsua, U.nombre, U.foto_perfil, P.CodPost, P.contenido, P.img from usuarios U inner join post P on U.CodUsua = P.CodUsua where P.CodUsua in($amigos) ORDER BY P.CodPost DESC");
-		//$consulta->execute();
-		$resultado = $consulta->fetch_assoc();
+
+		$sql = "select U.CodUsua, U.nombre, U.foto_perfil, P.CodPost, P.contenido, P.img from usuarios U inner join post P on U.CodUsua = P.CodUsua where P.CodUsua in($amigos) ORDER BY P.CodPost DESC";
+		$consulta = $mysqli->query($sql);
+		$resultado = arrayQuery($consulta);
+
+
 		return $resultado;
 	}
 
@@ -116,9 +117,9 @@ class comentarios{
 	function mostrar($CodPost)
 	{
 		$mysqli = new mysqli('127.0.0.1', 'root', '', 'social');
-		$consulta = $mysqli->query("select U.nombre, C.comentario from usuarios U inner join comentarios C on U.CodUsua = C.CodUsua where C.CodPost = :CodPost");
-		$consulta->execute(array(':CodPost' => $CodPost));
-		$resultado = $consulta->fetch_assoc();
+		$consulta = $mysqli->query("select U.nombre, C.comentario from usuarios U inner join comentarios C on U.CodUsua = C.CodUsua where C.CodPost = '$CodPost'");
+
+		$resultado = arrayQuery($consulta);
 		return $resultado;
 	}
 	
@@ -140,9 +141,9 @@ class mg
 	function mostrar($CodPost)
 	{
 		$mysqli = new mysqli('127.0.0.1', 'root', '', 'social');
-		$consulta = $mysqli->query("select count(*) from mg where CodPost = :CodPost");
-		$consulta->execute(array(':CodPost' => $CodPost));
+		$consulta = $mysqli->query("select count(*) cant from mg where CodPost = '$CodPost'");
 		$resultados = $consulta->fetch_assoc();
+
 		return $resultados;
 	}
 
@@ -150,8 +151,7 @@ class mg
 	function verificar_mg($CodPost, $CodUsua)
 	{
 		$mysqli = new mysqli('127.0.0.1', 'root', '', 'social');
-		$consulta = $mysqli->query("select CodLike from mg where CodPost = :CodPost and CodUsua = :CodUsua");
-		$consulta->execute(array(':CodPost' => $CodPost, ':CodUsua' => $CodUsua));
+		$consulta = $mysqli->query("select CodLike from mg where CodPost = '$CodPost' and CodUsua = '$CodUsua'");
 		$resultados = $consulta->fetch_assoc();
 		return count($resultados);
 	}

@@ -46,7 +46,27 @@ function verificar_session()
 		header('location: login.php');
 	}
 }
+	
+	function imprimeVar($var,$salir=true){
+	echo "<pre>";
+	var_dump($var);
+	if($salir){
+		exit();
+	}
+}
+
+
+function arrayQuery($query){
+
 		
+		$rows = []; 
+
+		while ($row = $query->fetch_assoc()) {
+			$rows[] = $row;
+		}
+
+		return $rows;
+}	
 	
 
  ?>

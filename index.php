@@ -14,7 +14,8 @@ if(isset($_POST['publicar']) and !empty($_FILES) and !empty($_POST['contenido'])
 	$contenido = $_POST['contenido'];
 	$img = $destino . $_FILES['archivo']['name'];
 	$tmp = $_FILES['archivo']['tmp_name'];
-	post::agregar($_SESSION['CodUsua'], $contenido, $img);
+	$post = new post();
+	$post->agregar($_SESSION['CodUsua'], $contenido, $img);
 	move_uploaded_file($tmp, $img);
 	header('location: index.php');
 }
@@ -28,12 +29,17 @@ if(isset($_POST['publicar']) and !empty($_FILES) and !empty($_POST['contenido'])
 $post = $post->mostrarTodo($amigos['amigos']);
 
 
+//imprimeVar($posts);
+
 if(isset($_POST['comentario']))
 {
 	if(!empty($_POST['comentario']))
 	{
-		comentarios::agregar($_POST['comentario'], $_SESSION['CodUsua'], $_POST['CodPost']);
-		notificaciones::agregar(1, $_POST['CodPost'], $_SESSION['CodUsua']);
+		$comentarios = new comentarios();
+		$comentarios->agregar($_POST['comentario'], $_SESSION['CodUsua'], $_POST['CodPost']);
+		
+		$notificaciones = new notificaciones();
+		$notificaciones->agregar(1, $_POST['CodPost'], $_SESSION['CodUsua']);
 		header('location: index.php');
 	}
 
@@ -41,13 +47,15 @@ if(isset($_POST['comentario']))
 
 if(isset($_GET['mg']))
 {
-	mg::agregar($_GET['CodPost'], $_SESSION['CodUsua']);
-	notificaciones::agregar(false, $_GET['CodPost'], $_SESSION['CodUsua']);
+	$mg = mg();
+	$mg->agregar($_GET['CodPost'], $_SESSION['CodUsua']);
+
+	$notificaciones = new notificaciones();
+	$notificaciones->agregar(false, $_GET['CodPost'], $_SESSION['CodUsua']);
 		header('location: index.php');
 }
 
-
-require('publicacion.php');
+include 'publicacion.php';
 
  ?>
 
