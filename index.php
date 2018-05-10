@@ -7,6 +7,7 @@ verificar_session();
 require('header.php');
 require('subir.php');
 
+//imprimeVar($_GET,false);
 
 if(isset($_POST['publicar']) and !empty($_FILES) and !empty($_POST['contenido']))
 {
@@ -47,7 +48,7 @@ if(isset($_POST['comentario']))
 
 if(isset($_GET['mg']))
 {
-	$mg = mg();
+	$mg = new mg();
 	$mg->agregar($_GET['CodPost'], $_SESSION['CodUsua']);
 
 	$notificaciones = new notificaciones();

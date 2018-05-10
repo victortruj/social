@@ -6,14 +6,7 @@ class usuarios{
 	{
 		$mysqli = new mysqli('127.0.0.1', 'root', '', 'social');
 		$consulta = $mysqli->query("insert into usuarios(CodUsua, nombre, usuario, pass, pais, profesion, edad, foto_perfil) values(null, :nombre, :usuario, :pass, :pais, :profe, :edad, :foto_perfil)");
-		$consulta->execute(array(':nombre' => $datos[0],
-								  ':usuario' => $datos[1],
-								  ':pass' => $datos[2],
-								  ':pais' => $datos[3],
-								  ':profe' => $datos[4],
-								  ':edad' => $datos[5],
-								  ':foto_perfil' => 'img/sin foto de perfil.jpg'
-							));
+		
 	}
 
 
@@ -30,16 +23,7 @@ class usuarios{
 	{
 		$mysqli = new mysqli('127.0.0.1', 'root', '', 'social');
 		$consulta = $mysqli->query("update usuarios set nombre = :nombre, usuario = :usuario, profesion = :profesion, pais = :pais, foto_perfil = :foto_perfil where CodUsua = '$CodUsua'");
-		$consulta->execute(array(':nombre' => $datos[0],
-								  ':usuario' => $datos[1],
-								  ':profesion' => $datos[2],
-								   ':pais' => $datos[3],
-								  ':foto_perfil' => $datos[4],
-								  ':CodUsua' => $CodUsua
-
-							));
-
-		//aqui habia un error en el indice profesion
+		
 	}
 
 
@@ -47,7 +31,7 @@ class usuarios{
 	{
 		$mysqli = new mysqli('127.0.0.1', 'root', '', 'social');
 		$consulta = $mysqli->query("select * from usuarios where CodUsua = :CodUsua");
-		$consulta->execute(array(':CodUsua' => $CodUsua));
+		
 		$resultado = $consulta->fetch_assoc();
 		return $resultado;
 	}
@@ -68,7 +52,7 @@ class post{
 	{
 		$mysqli = new mysqli('127.0.0.1', 'root', '', 'social');
 		$consulta = $mysqli->query("select U.CodUsua, U.nombre, U.foto_perfil, P.CodPost, P.contenido, P.img from usuarios U inner join post P on U.CodUsua = P.CodUsua where P.CodUsua = :CodUsua ORDER BY P.CodPost DESC");
-		$consulta->execute(array(':CodUsua' => $CodUsua));
+		
 		$resultado = $consulta->fetch_assoc();
 		return $resultado;
 	}
@@ -90,7 +74,7 @@ class post{
 	{
 		$mysqli = new mysqli('127.0.0.1', 'root', '', 'social');
 		$consulta = $mysqli->query("select U.CodUsua, U.nombre, U.foto_perfil, P.CodPost, P.contenido, P.img from usuarios U inner join post P on U.CodUsua = P.CodUsua where P.CodPost = :CodPost ORDER BY P.CodPost DESC");
-		$consulta->execute(array(':CodPost' => $CodPost));
+		
 		$resultado = $consulta->fetch_assoc();
 		return $resultado;
 	}
@@ -105,12 +89,7 @@ class comentarios{
 	{
 		$mysqli = new mysqli('127.0.0.1', 'root', '', 'social');
 		$consulta = $mysqli->query("insert into comentarios(comentario, CodUsua, CodPost) values(:comentario, :CodUsua, :CodPost) ");
-		$consulta->execute(array(
-					':comentario' => $comentario,
-					':CodUsua' => $CodUsua,
-					':CodPost' => $CodPost
-
-					));
+		
 	}
 
 
@@ -133,8 +112,8 @@ class mg
 	function agregar($CodPost, $CodUsua)
 	{
 		$mysqli = new mysqli('127.0.0.1', 'root', '', 'social');
-		$consulta = $mysqli->query("insert into mg(CodLike, CodPost, CodUsua) values(null, :CodPost, :CodUsua)");
-		$consulta->execute(array(':CodPost' => $CodPost, ':CodUsua' => $CodUsua));
+		$consulta = $mysqli->query("insert into mg(CodLike, CodPost, CodUsua) values(null, '$CodPost', '$CodUsua')");
+		
 	}
 
 
@@ -165,12 +144,9 @@ class notificaciones
 	function agregar($accion, $CodPost, $CodUsua)
 	{
 		$mysqli = new mysqli('127.0.0.1', 'root', '', 'social');
-		$consulta = $mysqli->query("insert into notificaciones(CodNot, accion, CodPost, CodUsua, visto) values(null, :accion, :CodPost, :CodUsua, 0)");
-		$consulta->execute(array(
-			':accion' => $accion, 
-			':CodPost' => $CodPost, 
-			':CodUsua' => $CodUsua
-			));
+		$consulta = $mysqli->query("insert into notificaciones(CodNot, accion, CodPost, CodUsua, visto) values(null, '$accion',      '$CodPost', '$CodUsua' 0)");
+		
+
 	}
 
 
@@ -178,9 +154,9 @@ class notificaciones
 	{
 		$mysqli = new mysqli('127.0.0.1', 'root', '', 'social');
 		$consulta = $mysqli->query("select U.CodUsua, U.nombre, N.CodNot, N.accion, N.CodPost from notificaciones N inner join usuarios U on U.CodUsua = N.CodUsua where N.CodPost in(select CodPost from post where CodUsua = '$CodUsua') and N.visto = 0 and N.CodUsua != '$CodUsua'");
-		//$consulta->execute(array(
-		//	':CodUsua' => $CodUsua
-		//	));
+		
+
+
 		$resultados = $consulta->fetch_assoc();
 		return $resultados;
 
@@ -190,9 +166,7 @@ class notificaciones
 	{
 		$mysqli = new mysqli('127.0.0.1', 'root', '', 'social');
 		$consulta = $mysqli->query("update notificaciones set visto = 1 where CodPost = :CodPost");
-		$consulta->execute(array(
-			':CodPost' => $CodPost
-			));
+		
 	}
 }
 
@@ -203,25 +177,15 @@ class amigos
 	{
 		$mysqli = new mysqli('127.0.0.1', 'root', '', 'social');
 		$consulta = $mysqli->query("insert into amigos(CodAm, usua_enviador, usua_receptor, status, solicitud) values(null, :usua_enviador, :usua_receptor, :status, :solicitud)");
-		$consulta->execute(array(
-							':usua_enviador' => $usua_enviador,
-							':usua_receptor' => $usua_receptor,
-							':status' => '',
-							':solicitud' => 1
-
-			));
+		
+		
 	}
 
 	function verificar($usua_enviador, $usua_receptor)
 	{
 		$mysqli = new mysqli('127.0.0.1', 'root', '', 'social');
 		$consulta = $mysqli->query("select * from amigos where (usua_enviador = :usua_enviador and usua_receptor = :usua_receptor) or (usua_enviador = :usua_receptor and usua_receptor = :usua_enviador) ");
-		$consulta->execute(array(
-							':usua_enviador' => $usua_enviador,
-							':usua_receptor' => $usua_receptor,
-				
-
-			));
+		
 
 		$resultados = $consulta->fetch_assoc();
 		return $resultados;
@@ -231,9 +195,7 @@ class amigos
 	{
 		$mysqli = new mysqli('127.0.0.1', 'root', '', 'social');
 		$consulta = $mysqli->query(" select group_concat(usua_enviador,',', usua_receptor) as amigos from amigos where (usua_enviador = '$CodUsua' or usua_receptor = '$CodUsua') and status = 1 ");
-		//$consulta->execute(array(
-		//				':CodUsua' => $CodUsua
-		//	));
+		
 
       
 		$resultados = $consulta->fetch_assoc();
@@ -246,10 +208,7 @@ class amigos
 		$mysqli = new mysqli('127.0.0.1', 'root', '', 'social');
 		$consulta = $mysqli->query(" select U.CodUsua, U.nombre, A.CodAm from usuarios U inner join amigos A on U.CodUsua = A.usua_enviador where A.usua_receptor = '$CodUsua' and A.status != 1");
 		
-		// esto no 
-		//$consulta->execute(array(
-		//				':CodUsua' => $CodUsua
-		//	));
+		
 
 		$resultados = $consulta->fetch_assoc();
 		return $resultados;
@@ -259,27 +218,21 @@ class amigos
 	{
 		$mysqli = new mysqli('127.0.0.1', 'root', '', 'social');
 		$consulta = $mysqli->query(" update amigos set status = 1 where CodAm = :CodAm");
-		$consulta->execute(array(
-						':CodAm' => $CodAm
-			));
+		
 	}
 
 	function eliminar_solicitud($CodAm)
 	{
 		$mysqli = new mysqli('127.0.0.1', 'root', '', 'social');
 		$consulta = $mysqli->query("delete from amigos where CodAm = :CodAm");
-		$consulta->execute(array(
-						':CodAm' => $CodAm
-			));
+		
 	}
 
 	function cantidad_amigos($CodUsua)
 	{
 		$mysqli = new mysqli('127.0.0.1', 'root', '', 'social');
 		$consulta = $mysqli->query(" select count(*) from amigos where (usua_enviador = '$CodUsua' or usua_receptor = '$CodUsua') and status = 1 ");
-		//$consulta->execute(array(
-						//':CodUsua' => $CodUsua
-			//));
+		
 
 		$resultados = $consulta->fetch_assoc();
 		return $resultados;
