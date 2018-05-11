@@ -202,7 +202,9 @@ class notificaciones
 	function vistas($CodPost)
 	{
 		$mysqli = new mysqli('127.0.0.1', 'root', '', 'social');
-		$consulta = $mysqli->query("update notificaciones set visto = 1 where CodPost = :CodPost");
+		$consulta = $mysqli->query("update notificaciones set visto = 1 where CodPost = $CodPost");
+
+		return $consulta;
 		
 	}
 }
