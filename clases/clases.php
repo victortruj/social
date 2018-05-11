@@ -21,8 +21,30 @@ class usuarios{
 
 	function editar($CodUsua, $datos)
 	{
+	    $nombre = $datos[0];
+	    $usuario = $datos[1];
+	    $profesion = $datos[2];
+	    $pais = $datos[3];
+	    $foto = $datos[4];
+
+	    //si no lleva la imagen no se agrega al query
+	    $editarFoto = $foto ? "foto_perfil = '$foto'" : '';
+
 		$mysqli = new mysqli('127.0.0.1', 'root', '', 'social');
-		$consulta = $mysqli->query("update usuarios set nombre = :nombre, usuario = :usuario, profesion = :profesion, pais = :pais, foto_perfil = :foto_perfil where CodUsua = '$CodUsua'");
+		$consulta = $mysqli->query("
+            update 
+              usuarios 
+            set 
+              nombre = '$nombre', 
+              usuario = '$usuario', 
+              profesion = '$profesion', 
+              pais = '$pais', 
+              $editarFoto 
+            where 
+                CodUsua = '$CodUsua'
+        ");
+
+		return $consulta;
 		
 	}
 

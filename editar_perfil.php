@@ -4,27 +4,34 @@ require('funciones.php');
 require('clases/clases.php');
 verificar_session();
 
-	
-	$usuario = usuarios::usuario_por_codigo($_SESSION['CodUsua']);
+    $usuarios = new usuarios();
+
+	$usuario = $usuarios->usuario_por_codigo($_SESSION['CodUsua']);
+	$imagenActual = $usuario['foto_perfil'];
 
 
 	if(isset($_POST['editar']))
 	{
 		$destino = 'subidos/';
-		$foto_perfil = !empty($_FILES) ? $destino . $_FILES['foto']['name'] : $usuario[0]['foto_perfil'];
+		$nuevaImagen = !empty($_FILES['foto']['name']) ? $destino . $_FILES['foto']['name'] : $usuario['foto_perfil'];
 		$tmp = $_FILES['foto']['tmp_name'];
 		$datos = array(
 				$_POST['nombre'],
 				$_POST['usuario'],
 				$_POST['profesion'],
 				$_POST['pais'],
-				$foto_perfil
+				$nuevaImagen
 			);
 
 		if(strpos($datos[1], " ")  == false)
 		{
-			usuarios::editar($_SESSION['CodUsua'], $datos);
-			move_uploaded_file($tmp, $foto_perfil);
+			$edito =$usuarios->editar($_SESSION['CodUsua'], $datos);
+
+			//si se edito el perfil y la nueva imagen es diferente de la actual
+			if($edito && $nuevaImagen!=$imagenActual){
+                move_uploaded_file($tmp, $nuevaImagen);
+            }
+
 			header('location: editar_perfil.php');
 		}
 	}
@@ -41,10 +48,10 @@ verificar_session();
  	<div class="contenedor-form">
  		<h1>Editar perfil</h1>
  		<form action="<?php echo $_SERVER['PHP_SELF'] ?>" enctype="multipart/form-data" method="post">
- 			<input type="text" name="nombre" class="input-control" value="<?php echo $usuario[0]["nombre"]; ?>">
- 			<input type="text" name="usuario" class="input-control" value="<?php echo $usuario[0]["usuario"]; ?>">
- 			<input type="text" name="profesion" class="input-control" value="<?php echo $usuario[0]["profesion"]; ?>">
- 			<input type="text" name="pais" class="input-control" value="<?php echo $usuario[0]["pais"]; ?>">
+ 			<input type="text" name="nombre" class="input-control" value="<?php echo $usuario["nombre"]; ?>">
+ 			<input type="text" name="usuario" class="input-control" value="<?php echo $usuario["usuario"]; ?>">
+ 			<input type="text" name="profesion" class="input-control" value="<?php echo $usuario["profesion"]; ?>">
+ 			<input type="text" name="pais" class="input-control" value="<?php echo $usuario["pais"]; ?>">
 
  			<input type="file" name="foto" >
  			<input type="submit" value="Editar" name="editar" class="log-btn">
