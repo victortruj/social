@@ -4,8 +4,22 @@ class usuarios{
 
 	function registrar($datos)
 	{
+//	    imprimeVar($datos);
+
+        $nombre = $datos[0];
+        $usuario = $datos[1];
+        $pass = $datos[2];
+        $pais = $datos[3];
+        $profesion = $datos[4];
+        $edad = $datos[5];
+
 		$mysqli = new mysqli('127.0.0.1', 'root', '', 'social');
-		$consulta = $mysqli->query("insert into usuarios(CodUsua, nombre, usuario, pass, pais, profesion, edad, foto_perfil) values(null, :nombre, :usuario, :pass, :pais, :profe, :edad, :foto_perfil)");
+		$consulta = $mysqli->query("
+            insert into usuarios(CodUsua, nombre, usuario, pass, pais, profesion, edad, foto_perfil) 
+            values(null, '$nombre', '$usuario', '$pass', '$pais', '$profesion', '$edad', 'img/sin foto de perfil.jpg' )
+        ");
+
+		return $consulta;
 		
 	}
 
@@ -119,7 +133,9 @@ class comentarios{
 	function agregar($comentario, $CodUsua, $CodPost)
 	{
 		$mysqli = new mysqli('127.0.0.1', 'root', '', 'social');
-		$consulta = $mysqli->query("insert into comentarios(comentario, CodUsua, CodPost) values(:comentario, '$CodUsua', :CodPost) ");
+		$consulta = $mysqli->query("insert into comentarios(comentario, CodUsua, CodPost) values('$comentario', '$CodUsua', '$CodPost') ");
+
+		return $consulta;
 		
 	}
 
@@ -215,7 +231,11 @@ class amigos
 	function agregar($usua_enviador, $usua_receptor)
 	{
 		$mysqli = new mysqli('127.0.0.1', 'root', '', 'social');
-		$consulta = $mysqli->query("insert into amigos(CodAm, usua_enviador, usua_receptor, status, solicitud) values(null, '$usua_enviador', '$usua_receptor', :status, :solicitud)");
+		$consulta = $mysqli->query("
+            insert into 
+                amigos(CodAm, usua_enviador, usua_receptor, status, solicitud) 
+                values(null, '$usua_enviador', '$usua_receptor', :status, :solicitud)
+        ");
 		
 		
 	}

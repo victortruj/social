@@ -58,14 +58,17 @@ function verificar_session()
 
 function arrayQuery($query){
 
-		
-		$rows = []; 
+	if(!$query){
+	    return [];
+    }
 
-		while ($row = $query->fetch_assoc()) {
-			$rows[] = $row;
-		}
+    $rows = [];
 
-		return $rows;
+    while ($row = $query->fetch_assoc()) {
+        $rows[] = $row;
+    }
+
+    return $rows;
 }	
 	
 
