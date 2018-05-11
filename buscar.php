@@ -5,19 +5,20 @@ require('clases/clases.php');
 require('header.php');
 verificar_session();
 
+$busqueda =isset($_GET['busqueda']) ? $_GET['busqueda'] : '';
 
-if(isset($_GET['busqueda']))
-{
+//Si se manda un valor en el campo busqueda
+if($busqueda){
+
 	$nombre = $_GET['busqueda'];
-	$con = conexion("root", "");
-	$consulta = $con->prepare("select * from usuarios where nombre like :nombre ");
-	$consulta->execute(array(':nombre' => "%$nombre%"));
-	$resultados = $consulta->fetchAll();
+    $mysqli = new mysqli('127.0.0.1', 'root', '', 'social');
+	$consulta = $mysqli->query("select * from usuarios where nombre like '%$busqueda%' ");
+	$resultados = arrayQuery($consulta);
+
+//	imprimeVar($resultados);
+
 }
-
- ?>
-
-
+?>
 <div class="resultados-busqueda">
 	<?php if(!empty($resultados)): ?>
 		<?php foreach($resultados as $r): ?>
@@ -34,6 +35,5 @@ if(isset($_GET['busqueda']))
 	<?php endif; ?>
 </div>
 
-
- </body>
- </html>
+</body>
+</html>
