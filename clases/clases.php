@@ -29,8 +29,9 @@ class usuarios{
 
 	function usuario_por_codigo($CodUsua)
 	{
+
 		$mysqli = new mysqli('127.0.0.1', 'root', '', 'social');
-		$consulta = $mysqli->query("select * from usuarios where CodUsua = :CodUsua");
+		$consulta = $mysqli->query("select * from usuarios where CodUsua = '$CodUsua'");
 		
 		$resultado = $consulta->fetch_assoc();
 		return $resultado;
@@ -51,9 +52,9 @@ class post{
 	function post_por_usuario($CodUsua)
 	{
 		$mysqli = new mysqli('127.0.0.1', 'root', '', 'social');
-		$consulta = $mysqli->query("select U.CodUsua, U.nombre, U.foto_perfil, P.CodPost, P.contenido, P.img from usuarios U inner join post P on U.CodUsua = P.CodUsua where P.CodUsua = :CodUsua ORDER BY P.CodPost DESC");
+		$consulta = $mysqli->query("select U.CodUsua, U.nombre, U.foto_perfil, P.CodPost, P.contenido, P.img from usuarios U inner join post P on U.CodUsua = P.CodUsua where P.CodUsua = '$CodUsua' ORDER BY P.CodPost DESC");
 		
-		$resultado = $consulta->fetch_assoc();
+		$resultado = arrayQuery($consulta);
 		return $resultado;
 	}
 
@@ -88,7 +89,7 @@ class comentarios{
 	function agregar($comentario, $CodUsua, $CodPost)
 	{
 		$mysqli = new mysqli('127.0.0.1', 'root', '', 'social');
-		$consulta = $mysqli->query("insert into comentarios(comentario, CodUsua, CodPost) values(:comentario, :CodUsua, :CodPost) ");
+		$consulta = $mysqli->query("insert into comentarios(comentario, CodUsua, CodPost) values(:comentario, '$CodUsua', :CodPost) ");
 		
 	}
 
@@ -176,7 +177,7 @@ class amigos
 	function agregar($usua_enviador, $usua_receptor)
 	{
 		$mysqli = new mysqli('127.0.0.1', 'root', '', 'social');
-		$consulta = $mysqli->query("insert into amigos(CodAm, usua_enviador, usua_receptor, status, solicitud) values(null, :usua_enviador, :usua_receptor, :status, :solicitud)");
+		$consulta = $mysqli->query("insert into amigos(CodAm, usua_enviador, usua_receptor, status, solicitud) values(null, '$usua_enviador', '$usua_receptor', :status, :solicitud)");
 		
 		
 	}
@@ -184,8 +185,7 @@ class amigos
 	function verificar($usua_enviador, $usua_receptor)
 	{
 		$mysqli = new mysqli('127.0.0.1', 'root', '', 'social');
-		$consulta = $mysqli->query("select * from amigos where (usua_enviador = :usua_enviador and usua_receptor = :usua_receptor) or (usua_enviador = :usua_receptor and usua_receptor = :usua_enviador) ");
-		
+		$consulta = $mysqli->query("select * from amigos where (usua_enviador = '$usua_enviador' and usua_receptor = '$usua_receptor') or (usua_enviador = '$usua_receptor' and usua_receptor = '$usua_enviador') ");
 
 		$resultados = $consulta->fetch_assoc();
 		return $resultados;
@@ -231,11 +231,10 @@ class amigos
 	function cantidad_amigos($CodUsua)
 	{
 		$mysqli = new mysqli('127.0.0.1', 'root', '', 'social');
-		$consulta = $mysqli->query(" select count(*) from amigos where (usua_enviador = '$CodUsua' or usua_receptor = '$CodUsua') and status = 1 ");
-		
+		$consulta = $mysqli->query(" select count(*) cant from amigos where (usua_enviador = '$CodUsua' or usua_receptor = '$CodUsua') and status = 1 ");
 
-		$resultados = $consulta->fetch_assoc();
-		return $resultados;
+		$resultado = $consulta->fetch_assoc();
+		return $resultado['cant'] ? $resultado['cant'] : 0;
 	}
 }
 
