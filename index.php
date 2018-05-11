@@ -22,11 +22,11 @@ if(isset($_POST['publicar']) and !empty($_FILES) and !empty($_POST['contenido'])
 }
 
 
-   $amigos = new amigos();
-   $amigos = $amigos->codigos_amigos($_SESSION['CodUsua']);
+$amigos = new amigos();
+$amigos = $amigos->codigos_amigos($_SESSION['CodUsua']);
 
 
-   $post = new post();
+$post = new post();
 $post = $post->mostrarTodo($amigos['amigos']);
 
 
@@ -58,7 +58,7 @@ if(isset($_GET['mg']))
 
 include 'publicacion.php';
 
- ?>
+?>
 
 
 	

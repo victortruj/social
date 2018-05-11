@@ -81,7 +81,7 @@ class post{
 	{
 		$mysqli = new mysqli('127.0.0.1', 'root', '', 'social');
 		$consulta = $mysqli->query("insert into post(CodPost, CodUsua, contenido, img) values(null, '$CodUsua', '$contenido', '$img')");
-	
+
 	}
 
 
@@ -234,10 +234,10 @@ class amigos
 		$consulta = $mysqli->query("
             insert into 
                 amigos(CodAm, usua_enviador, usua_receptor, status, solicitud) 
-                values(null, '$usua_enviador', '$usua_receptor', :status, :solicitud)
+                values(null, '$usua_enviador', '$usua_receptor', '',1)
         ");
 		
-		
+		return $consulta;
 	}
 
 	function verificar($usua_enviador, $usua_receptor)
@@ -265,25 +265,26 @@ class amigos
 	{
 		$mysqli = new mysqli('127.0.0.1', 'root', '', 'social');
 		$consulta = $mysqli->query(" select U.CodUsua, U.nombre, A.CodAm from usuarios U inner join amigos A on U.CodUsua = A.usua_enviador where A.usua_receptor = '$CodUsua' and A.status != 1");
-		
-		
 
-		$resultados = $consulta->fetch_assoc();
+		$resultados = arrayQuery($consulta);
 		return $resultados;
 	}
 
 	function aceptar($CodAm)
 	{
-		$mysqli = new mysqli('127.0.0.1', 'root', '', 'social');
-		$consulta = $mysqli->query(" update amigos set status = 1 where CodAm = :CodAm");
-		
+        //		imprimeVar('Aceptar solicitud');
+        $mysqli = new mysqli('127.0.0.1', 'root', '', 'social');
+		$consulta = $mysqli->query(" update amigos set status = 1 where CodAm = '$CodAm'");
+
+		return $consulta;
 	}
 
 	function eliminar_solicitud($CodAm)
 	{
 		$mysqli = new mysqli('127.0.0.1', 'root', '', 'social');
-		$consulta = $mysqli->query("delete from amigos where CodAm = :CodAm");
-		
+		$consulta = $mysqli->query("delete from amigos where CodAm = '$CodAm'");
+
+		return $consulta;
 	}
 
 	function cantidad_amigos($CodUsua)

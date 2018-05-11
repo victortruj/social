@@ -75,7 +75,7 @@ if(isset($_GET['mg']))
 	<?php if($_GET['CodUsua'] != $_SESSION['CodUsua']): ?>
 		<?php if(empty($verificar_amigos)): ?>
 			<li><a href="perfil.php?CodUsua=<?php echo $_GET['CodUsua']; ?>&&agregar=<?php echo $_GET['CodUsua']; ?>">Agregar</a></li>
-		<?php elseif($verificar_amigos[0]['status'] == true): ?>
+		<?php elseif($verificar_amigos['status'] == true): ?>
 			<li><a href="#">Amigos</a></li>
 		<?php else: ?>
 			<li><a href="#">Solicitud enviada</a></li>
