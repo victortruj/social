@@ -96,9 +96,17 @@ class post{
 	function mostrar_por_codigo_post($CodPost)
 	{
 		$mysqli = new mysqli('127.0.0.1', 'root', '', 'social');
-		$consulta = $mysqli->query("select U.CodUsua, U.nombre, U.foto_perfil, P.CodPost, P.contenido, P.img from usuarios U inner join post P on U.CodUsua = P.CodUsua where P.CodPost = :CodPost ORDER BY P.CodPost DESC");
+		$consulta = $mysqli->query("
+          select 
+            U.CodUsua, U.nombre, U.foto_perfil, P.CodPost, P.contenido, P.img 
+          from 
+            usuarios U inner join post P on U.CodUsua = P.CodUsua 
+          where 
+            P.CodPost = '$CodPost' ORDER BY P.CodPost DESC
+          ");
 		
-		$resultado = $consulta->fetch_assoc();
+		$resultado = arrayQuery($consulta);
+
 		return $resultado;
 	}
 
@@ -176,11 +184,17 @@ class notificaciones
 	function mostrar($CodUsua)
 	{
 		$mysqli = new mysqli('127.0.0.1', 'root', '', 'social');
-		$consulta = $mysqli->query("select U.CodUsua, U.nombre, N.CodNot, N.accion, N.CodPost from notificaciones N inner join usuarios U on U.CodUsua = N.CodUsua where N.CodPost in(select CodPost from post where CodUsua = '$CodUsua') and N.visto = 0 and N.CodUsua != '$CodUsua'");
-		
+		$consulta = $mysqli->query("
+            select 
+                U.CodUsua, U.nombre, N.CodNot, N.accion, N.CodPost 
+            from 
+                notificaciones N inner join usuarios U on U.CodUsua = N.CodUsua 
+            where 
+                N.CodPost in(select CodPost from post where CodUsua = '$CodUsua') 
+                and N.visto = 0 and N.CodUsua != '$CodUsua'
+        ");
 
-
-		$resultados = $consulta->fetch_assoc();
+		$resultados = arrayQuery($consulta);
 		return $resultados;
 
 	}
