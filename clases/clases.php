@@ -202,7 +202,7 @@ class notificaciones
 	function agregar($accion, $CodPost, $CodUsua)
 	{
 		$mysqli = new mysqli('127.0.0.1', 'root', '', 'social');
-		$consulta = $mysqli->query("insert into notificaciones(CodNot, accion, CodPost, CodUsua, visto) values(null, '$accion','$CodPost', '$CodUsua', 0)");
+		$consulta = $mysqli->query("insert into notificaciones(CodNot, accion, CodPost, CodUsua, visto) values(null, $accion,'$CodPost', '$CodUsua', 0)");
 		
 
 	}
