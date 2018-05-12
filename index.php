@@ -30,8 +30,6 @@ $post = new post();
 $post = $post->mostrarTodo($amigos['amigos']);
 
 
-//imprimeVar($posts);
-
 if(isset($_POST['comentario']))
 {
 	if(!empty($_POST['comentario']))
@@ -53,18 +51,19 @@ if(isset($_GET['mg']))
 
 	$notificaciones = new notificaciones();
 	$notificaciones->agregar(false, $_GET['CodPost'], $_SESSION['CodUsua']);
-		header('location: index.php');
+    header('location: index.php');
+}
+
+if(isset($_GET['deletemg']))
+{
+    $mg = new mg();
+    $mg->eliminar($_GET['CodLike']);
+
+    header('location: index.php');
 }
 
 include 'publicacion.php';
 
 ?>
-
-
-	
-
-
-	
- 	
- </body>
- </html>
+</body>
+</html>

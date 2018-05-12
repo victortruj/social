@@ -158,8 +158,11 @@ class mg
 {
 	function agregar($CodPost, $CodUsua)
 	{
+
 		$mysqli = new mysqli('127.0.0.1', 'root', '', 'social');
 		$consulta = $mysqli->query("insert into mg(CodLike, CodPost, CodUsua) values(null, '$CodPost', '$CodUsua')");
+
+        return $consulta;
 		
 	}
 
@@ -178,9 +181,17 @@ class mg
 	{
 		$mysqli = new mysqli('127.0.0.1', 'root', '', 'social');
 		$consulta = $mysqli->query("select CodLike from mg where CodPost = '$CodPost' and CodUsua = '$CodUsua'");
-		$resultados = $consulta->fetch_assoc();
-		return count($resultados);
+        $resultados = $consulta->fetch_assoc();
+
+        return $resultados;
 	}
+
+	function eliminar($codLike){
+        $mysqli = new mysqli('127.0.0.1', 'root', '', 'social');
+        $consulta = $mysqli->query("delete from mg where CodLike='$codLike'");
+
+        return $consulta;
+    }
 
 }
 
@@ -191,7 +202,7 @@ class notificaciones
 	function agregar($accion, $CodPost, $CodUsua)
 	{
 		$mysqli = new mysqli('127.0.0.1', 'root', '', 'social');
-		$consulta = $mysqli->query("insert into notificaciones(CodNot, accion, CodPost, CodUsua, visto) values(null, '$accion',      '$CodPost', '$CodUsua' 0)");
+		$consulta = $mysqli->query("insert into notificaciones(CodNot, accion, CodPost, CodUsua, visto) values(null, '$accion','$CodPost', '$CodUsua', 0)");
 		
 
 	}

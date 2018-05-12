@@ -16,8 +16,8 @@
 			<p id="like">
 				<?php 
 					$mg = new mg();
-					$cant = $mg->mostrar($posts['CodPost'])['cant']; 
-					echo $cant;
+					$cant = $mg->mostrar($posts['CodPost']);
+					echo $cant['cant'];
 					?> me gusta
 				</p>
 			<div id="mostrar-comentarios">
@@ -39,13 +39,20 @@
 			</div>
 			<div class="publi-contene-like">
 				<?php
-					$mg = new mg(); 
-					if($mg->verificar_mg($posts['CodPost'], $_SESSION['CodUsua']) == 0): 
-				?>
-					<a href="<?php echo $_SERVER['PHP_SELF'] ?>?mg=1&&CodPost=<?php echo $posts['CodPost'] ?>" class="like icon-checkmark2"></a>
-				<?php else: ?>
-					<a href="<?php echo $_SERVER['PHP_SELF'] ?>?mg=1&&CodPost=<?php echo $posts['CodPost'] ?>" class="like icon-checkmark"></a>
-				<?php endif; ?>
+					$mg = new mg();
+                    $mg = $mg->verificar_mg($posts['CodPost'], $_SESSION['CodUsua']);
+
+                    if(!$mg){
+				        ?>
+					    <a href="<?php echo $_SERVER['PHP_SELF'] ?>?mg=1&&CodPost=<?php echo $posts['CodPost'] ?>" class="like icon-checkmark2"></a>
+				        <?php
+					}
+					else{
+                        ?>
+                        <a href="<?php echo $_SERVER['PHP_SELF'] ?>?deletemg=1&&CodLike=<?php echo $mg['CodLike'] ?>" class="like icon-checkmark"></a>
+                        <?php
+					}
+					?>
 				<form action="<?php echo $_SERVER['PHP_SELF'] ?>" class="comentario" method="post">
 					<input type="text" name="comentario" placeholder="Escribe un comentario">
 					<input type="hidden" name="CodPost" value="<?php echo $posts['CodPost']; ?>">
