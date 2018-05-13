@@ -50,7 +50,7 @@ if(isset($_GET['mg']))
 	$mg->agregar($_GET['CodPost'], $_SESSION['CodUsua']);
 
 	$notificaciones = new notificaciones();
-	$notificaciones->agregar(false, $_GET['CodPost'], $_SESSION['CodUsua']);
+	$notificaciones->agregar(0, $_GET['CodPost'], $_SESSION['CodUsua']);
     header('location: index.php');
 }
 
