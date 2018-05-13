@@ -8,7 +8,7 @@
 </head>
 <body>
 <header>
-    <h1 class="titulo">Red social</h1>
+    <h1 class="titulo">ONE SOCIAL</h1>
 
     <form action="buscar.php" method="get" id="buscar">
         <input type="text" name="busqueda" placeholder="Buscar amigos">
